@@ -73,8 +73,7 @@ def get_infos(headers):
         # get the contents of the desired headings
         contents = [find_subpoints(lambda x: x.startswith(s), input) for s in headers]
 
-    year, s1_courses, s2_courses = contents
-    return year[0], s1_courses, s2_courses
+    return contents
 
 def create_folder(path):
     """Used to create a folder with a given path."""
@@ -88,8 +87,8 @@ def create_folder(path):
 def main():
     infos_to_get = ["Year", "Courses first semester", "Courses second semester:"]
     y, s1, s2 = get_infos(infos_to_get)
-    create_year(int(y))
-    create_courses(int(y), s1, s2)
+    create_year(int(y[0]))
+    create_courses(int(y[0]), s1, s2)
 
 if __name__ == "__main__":
     main()
