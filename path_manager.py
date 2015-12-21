@@ -23,9 +23,31 @@ def create_year(year):
     return year
 
 #remember to create several folders
-def create_courses(year):
+def create_courses(year, courses_1, courses_2):
     """Creates the folders for each course"""
-    pass
+
+    s1 = 'Semester %d' % (int(year) * 2 - 1)
+    s2 = 'Semester %d' % (int(year) * 2)
+
+    # directory in which the files are created
+    dir_name = 'Desktop/UoE/Year %d' % year
+
+    # change working directory to home directory
+    os.chdir(os.path.expanduser('~'))
+
+    def create_course(s, c):
+        print("Creating folder for %s..." % c)
+        c_dir = os.path.join(dir_name, s, c)
+        create_folder(c_dir)
+        create_folder(os.path.join(c_dir, 'Past papers'))
+        create_folder(os.path.join(c_dir, 'Lectures'))
+
+    # create folders for semester 1
+    for c in courses_1:
+        create_course(s1, c)
+
+    for c in courses_2:
+        create_course(s2, c)
 
 
 def get_infos():
@@ -78,6 +100,7 @@ def create_folder(path):
 def main():
     y, s1, s2 = get_infos()
     create_year(int(y))
+    create_courses(int(y), s1, s2)
 
 if __name__ == "__main__":
     main()
