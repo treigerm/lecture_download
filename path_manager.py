@@ -1,8 +1,7 @@
 import os
 
-def create_year():
-    year = int(input("In which year are you in? (Enter an integer)\n"))
-
+def create_year(year):
+    """Creates the folders for the current year."""
     # calculate semester numbers
     s1 = int(year) * 2 - 1
     s2 = int(year) * 2
@@ -20,6 +19,18 @@ def create_year():
     # create directories for semesters
     create_folder(path_s1)
     create_folder(path_s2)
+
+    return year
+
+#remember to create several folders
+def create_courses(year):
+    """Creates the folders for each course"""
+    pass
+
+
+def get_infos():
+    """Gets the information from the setup-file"""
+    pass
 
 def create_folder(path):
     print("Try to create '%s'..." % path)
