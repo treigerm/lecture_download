@@ -53,25 +53,28 @@ def create_courses(year, courses_1, courses_2):
         create_course(s2, c)
 
 
-def get_infos():
-    """Gets the information from the setup-file."""
+def get_infos(headers):
+    """Gets the information from the setup-file. Takes as an argument the list of information it should get."""
+
     def find_subpoints(predicate, lines):
+        """Given a predicate this function returns every line after the predicate until it encounters an empty line."""
         result = []
+        # drop everything until we find the desired heading
         for line in itertools.dropwhile(lambda y: not(predicate(y)),lines):
-            l = line.rstrip()
-            if l:
+            l = line.rstrip()             # remove newline characters
+            if l:                         # get lines until we get empty line
                 result.append(l)
             else:
                 break
 
-        return result[1:]
+        return result[1:] # remove first item because this is our heading
 
     with open("setup.txt") as input:
-        year = find_subpoints(lambda x: x.startswith("Year"), input)[0]
-        s1_courses = find_subpoints(lambda x: x.startswith("Courses f"), input)
-        s2_courses = find_subpoints(lambda x: x.startswith("Courses s"), input)
+        # get the contents of the desired headings
+        contents = [find_subpoints(lambda x: x.startswith(s), input) for s in headers]
 
-    return year, s1_courses, s2_courses
+    year, s1_courses, s2_courses = contents
+    return year[0], s1_courses, s2_courses
 
 def create_folder(path):
     """Used to create a folder with a given path."""
@@ -83,7 +86,8 @@ def create_folder(path):
         print("'%s' already exists" % path)
 
 def main():
-    y, s1, s2 = get_infos()
+    infos_to_get = ["Year", "Courses first semester", "Courses second semester:"]
+    y, s1, s2 = get_infos(infos_to_get)
     create_year(int(y))
     create_courses(int(y), s1, s2)
 
