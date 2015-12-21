@@ -30,7 +30,40 @@ def create_courses(year):
 
 def get_infos():
     """Gets the information from the setup-file"""
-    pass
+    y = False
+    s1 = False
+    s2 = False
+
+    year = 0
+    s1_courses = []
+    s2_courses = []
+
+    with open("setup.txt") as input:
+        for line in input:
+            l = line.rstrip()
+            if l.startswith("Year"):
+                year = True
+            elif l.startswith("Courses f"):
+                s1 = True
+            elif l.startswith("Courses s"):
+                s2 = True
+            elif y:
+                if l:
+                    year = int(l)
+                else:
+                    y = False
+            elif s1:
+                if l:
+                    s1_courses.append(l)
+                else:
+                    s1 = False
+            elif s2:
+                if l:
+                    s2_courses.append(l)
+                else:
+                    s2 = False
+
+    return year, s1_courses, s2_courses
 
 def create_folder(path):
     print("Try to create '%s'..." % path)
@@ -41,7 +74,8 @@ def create_folder(path):
         print("'%s' already exists" % path)
 
 def main():
-    create_year()
+    y, s1, s2 = get_infos()
+    create_year(y)
 
 if __name__ == "__main__":
     main()
