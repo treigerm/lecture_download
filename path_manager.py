@@ -1,4 +1,5 @@
 import os
+import itertools
 
 def create_year(year):
     """Creates the folders for the current year."""
@@ -54,40 +55,21 @@ def create_courses(year, courses_1, courses_2):
 
 def get_infos():
     """Gets the information from the setup-file."""
-    # Booleans used to decide to which variable we add line contents
-    y = False
-    s1 = False
-    s2 = False
+    def find_subpoints(predicate, lines):
+        result = []
+        for line in itertools.dropwhile(lambda y: not(predicate(y)),lines):
+            l = line.rstrip()
+            if l:
+                result.append(l)
+            else:
+                break
 
-    # variables for saving line contents
-    year = 0
-    s1_courses = []
-    s2_courses = []
+        return result[1:]
 
     with open("setup.txt") as input:
-        for line in input:
-            l = line.rstrip()
-            if l.startswith("Year"):
-                year = True
-            elif l.startswith("Courses f"):
-                s1 = True
-            elif l.startswith("Courses s"):
-                s2 = True
-            elif y: # can we make the stuff here shorter?
-                if l:
-                    year = int(l)
-                else:
-                    y = False
-            elif s1:
-                if l:
-                    s1_courses.append(l)
-                else:
-                    s1 = False
-            elif s2:
-                if l:
-                    s2_courses.append(l)
-                else:
-                    s2 = False
+        year = find_subpoints(lambda x: x.startswith("Year"), input)[0]
+        s1_courses = find_subpoints(lambda x: x.startswith("Courses f"), input)
+        s2_courses = find_subpoints(lambda x: x.startswith("Courses s"), input)
 
     return year, s1_courses, s2_courses
 
