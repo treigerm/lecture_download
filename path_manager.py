@@ -30,10 +30,12 @@ def create_courses(year):
 
 def get_infos():
     """Gets the information from the setup-file"""
+    # Booleans used to decide to which variable we add line contents
     y = False
     s1 = False
     s2 = False
 
+    # variables for saving line contents
     year = 0
     s1_courses = []
     s2_courses = []
@@ -47,7 +49,7 @@ def get_infos():
                 s1 = True
             elif l.startswith("Courses s"):
                 s2 = True
-            elif y:
+            elif y: # can we make the stuff here shorter?
                 if l:
                     year = int(l)
                 else:
@@ -75,7 +77,7 @@ def create_folder(path):
 
 def main():
     y, s1, s2 = get_infos()
-    create_year(y)
+    create_year(int(y))
 
 if __name__ == "__main__":
     main()
