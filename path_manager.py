@@ -2,19 +2,20 @@ import os
 
 def create_year(year):
     """Creates the folders for the current year."""
-    # calculate semester numbers
-    s1 = int(year) * 2 - 1
-    s2 = int(year) * 2
+    # change working directory to home directory
+    os.chdir(os.path.expanduser('~'))
 
     # directory in which the files are created
     dir_name = 'Desktop/UoE'
 
-    # change working directory to home directory
-    os.chdir(os.path.expanduser('~'))
+    # create directories
+    y = 'Year %s' % year
+    s1 = 'Semester %s' % (int(year) * 2 - 1)
+    s2 = 'Semester %s' % (int(year) * 2)
 
-    # create pathes for the semesters
-    path_s1 = os.path.join(dir_name, 'Year %s' % year, 'Semester %s' % s1)
-    path_s2 = os.path.join(dir_name, 'Year %s' % year, 'Semester %s' % s2)
+    # create paths for the semesters
+    path_s1 = os.path.join(dir_name, y, s1)
+    path_s2 = os.path.join(dir_name, y, s2)
 
     # create directories for semesters
     create_folder(path_s1)
@@ -24,7 +25,7 @@ def create_year(year):
 
 #remember to create several folders
 def create_courses(year, courses_1, courses_2):
-    """Creates the folders for each course"""
+    """Creates the folders for all course in both semesters."""
     # change working directory to home directory
     os.chdir(os.path.expanduser('~'))
 
@@ -35,8 +36,8 @@ def create_courses(year, courses_1, courses_2):
     s1 = 'Semester %d' % (int(year) * 2 - 1)
     s2 = 'Semester %d' % (int(year) * 2)
 
-    # this function takes a semester and a course and creates a folder for it
     def create_course(s, c):
+        """Creates the folders for one course."""
         print("Creating folder for %s..." % c)
         c_dir = os.path.join(dir_name, s, c)
         create_folder(c_dir)
@@ -52,7 +53,7 @@ def create_courses(year, courses_1, courses_2):
 
 
 def get_infos():
-    """Gets the information from the setup-file"""
+    """Gets the information from the setup-file."""
     # Booleans used to decide to which variable we add line contents
     y = False
     s1 = False
@@ -91,6 +92,7 @@ def get_infos():
     return year, s1_courses, s2_courses
 
 def create_folder(path):
+    """Used to create a folder with a given path."""
     print("Try to create '%s'..." % path)
     if not os.path.exists(path):
         os.makedirs(path)
