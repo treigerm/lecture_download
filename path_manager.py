@@ -22,12 +22,12 @@ def create_year():
     create_folder(path_s2)
 
 def create_folder(path):
-    print("Try to create %s" % path)
+    print("Try to create '%s'..." % path)
     if not os.path.exists(path):
         os.makedirs(path)
-        print("Created %s" % path)
+        print("Created '%s'." % path)
     else:
-        print("%s already exists" % path)
+        print("'%s' already exists" % path)
 
 def main():
     create_year()
