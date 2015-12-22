@@ -77,15 +77,21 @@ def get_infos(headers):
 
 def create_folder(path):
     """Used to create a folder with a given path."""
-    print("Try to create '%s'..." % path)
     if not os.path.exists(path):
         os.makedirs(path)
         print("Created '%s'." % path)
     else:
         print("'%s' already exists" % path)
 
-def save_file(f_name, content, c_name):
-    pass
+def save_file(f_name, content, path):
+    # change working directory to the given path
+    os.chdir(os.path.expanduser('~'))
+    os.chdir(path)
+
+    # create file and write content to it
+    print("Saving %s.." % f_name)
+    with open(f_name, 'w+') as f:
+        f.write(content)
 
 def main():
     infos_to_get = ["Year", "Courses first semester", "Courses second semester"]

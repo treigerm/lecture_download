@@ -52,7 +52,7 @@ def find_lecs(page_link):
         return results
     else:
         # here you have to search through the other links
-        pass
+        print("Did not find any lectures in %s" % page_link)
 
 def download_lec(link):
     """Downloads the pdf at the given link and calls a function which saves the file at an appropiate location."""
@@ -60,8 +60,9 @@ def download_lec(link):
     find_pdf = re.compile(r'((\w|-)+\.pdf)$')
     name = find_pdf.search(link).group()
 
-    # open the pdf-link and return the file with its name
+    # open the pdf-link
     res = requests.get(link)
+
     return res.content, name
 
 def main():
