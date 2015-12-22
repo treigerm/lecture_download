@@ -23,9 +23,29 @@ def find_website(c_name):
         print("Did not find a course website for %s." % c_name)
         return ""
 
-
-
 def find_lecs(page_link):
+    page_slides = find_slides(page_link)
+    if page_slides:
+        return page_slides
+    else:
+        res = requests.get(page_link)
+        res.raise_for_status()
+        soup = bs4.BeautifulSoup(res.text, "lxml")
+
+        for link in soup.find_all('a'):
+            l = link.get('href')
+            lecture_pdf = lambda x: ('lectures' in x) or ('slides' in x)
+            try:
+                if lecture_pdf(l):
+                    sub_slides = find_slides(l) # how do you determine the shape of the link?
+                    if sub_slides:
+                        return sub_slides
+            except: # exception is raised if l is of the NoneType
+                continue
+
+
+
+def find_slides(page_link):
     """Tries to find the lecture slides on a course web page."""
     results = []
     # opens the given webpage
@@ -40,22 +60,17 @@ def find_lecs(page_link):
         lecture_pdf = lambda x: (('lectures' in x) or ('slides' in x)) and x.endswith('.pdf')
         try:
             if lecture_pdf(l) and l not in results:
-                results.append(page_link + l)
-        except:
+                results.append(page_link + l) # think of how you can make this work for all link forms
+        except: # exception is raised if l is of the NoneType
             continue
 
-
-    # check if results are empty
-    # if no then return results
-    # if yes search through links with 'Lecture(s)' or 'slide(s)'
     if results:
         return results
     else:
-        # here you have to search through the other links
         print("Did not find any lectures in %s" % page_link)
 
 def download_lec(link):
-    """Downloads the pdf at the given link and calls a function which saves the file at an appropiate location."""
+    """Downloads the PDF at the given link and calls a function which saves the file at an appropiate location."""
     # find pdf name inside the given link
     find_pdf = re.compile(r'((\w|-)+\.pdf)$')
     name = find_pdf.search(link).group()
@@ -66,9 +81,10 @@ def download_lec(link):
     return res.content, name
 
 def main():
-    link = find_website("Informatics 1 - Functional Programming")
+    link = find_website("Informatics 1 - Cognitive Science")
     pdf_links = find_lecs(link)
-    download_lec(pdf_links[0])
+    print(pdf_links)
+    #download_lec(pdf_links[0])
 
 if __name__ == "__main__":
     main()
