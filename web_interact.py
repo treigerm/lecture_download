@@ -1,4 +1,4 @@
-import requests, webbrowser, bs4
+import requests, webbrowser, bs4, path_manager, re
 
 def find_website(c_name):
     """Tries to find the course website of a given course."""
@@ -54,14 +54,20 @@ def find_lecs(page_link):
         # here you have to search through the other links
         pass
 
-def download_lec(link, path):
-    """Downloads the pdf at the given link and saves it in the given path."""
-    pass
+def download_lec(link):
+    """Downloads the pdf at the given link and calls a function which saves the file at an appropiate location."""
+    # find pdf name inside the given link
+    find_pdf = re.compile(r'((\w|-)+\.pdf)$')
+    name = find_pdf.search(link).group()
+
+    # open the pdf-link and return the file with its name
+    res = requests.get(link)
+    return res.content, name
 
 def main():
     link = find_website("Informatics 1 - Functional Programming")
     pdf_links = find_lecs(link)
-    webbrowser.open(pdf_links[0])
+    download_lec(pdf_links[0])
 
 if __name__ == "__main__":
     main()

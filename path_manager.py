@@ -84,8 +84,11 @@ def create_folder(path):
     else:
         print("'%s' already exists" % path)
 
+def save_file(f_name, content, c_name):
+    pass
+
 def main():
-    infos_to_get = ["Year", "Courses first semester", "Courses second semester:"]
+    infos_to_get = ["Year", "Courses first semester", "Courses second semester"]
     y, s1, s2 = get_infos(infos_to_get)
     create_year(int(y[0]))
     create_courses(int(y[0]), s1, s2)
