@@ -14,21 +14,17 @@ def main():
     s1 = 'Semester %d' % (int(year) * 2 - 1)
     s2 = 'Semester %d' % (int(year) * 2)
 
-    for course in s1_courses:
-        link = wi.find_website(course)
-        pdf_links = wi.find_lecs(link)
-        for pdf_link in pdf_links:
-            content, name = wi.download_lec(pdf_link)
-            path = os.path.join(dir_name, s1, course, 'Lectures')
-            pm.save_file(name, content, path)
+    def save_all(courses):
+        for course in courses:
+            link = wi.find_website(course)
+            pdf_links = wi.find_lecs(link)
+            for pdf_link in pdf_links:
+                content, name = wi.download_lec(pdf_link)
+                path = os.path.join(dir_name, s1, course, 'Lectures')
+                pm.save_file(name, content, path)
 
-    for course in s2_courses:
-        link = wi.find_website(course)
-        pdf_links = wi.find_lecs(link)
-        for pdf_link in pdf_links:
-            content, name = wi.download_lec(pdf_link)
-            path = os.path.join(dir_name, s1, course, 'Lectures')
-            pm.save_file(name, content, path)
+    save_all(s1_courses)
+    save_all(s2_courses)
 
 
 if __name__ == "__main__":
