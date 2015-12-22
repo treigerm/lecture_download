@@ -26,6 +26,13 @@ def find_website(c_name):
 
 def find_lecs(link):
     """Tries to find the lecture slides on a course web page."""
+    # open webpage
+
+    # find links that contain 'Lecture(s)' or 'slide(s)' and are pdfs
+
+    # check if results are empty
+    # if no then return results
+    # if yes search through links with 'Lecture(s)' or 'slide(s)'
     pass
 
 def download_lec(link, path):
