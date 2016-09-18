@@ -8,6 +8,7 @@ import requests
 from urlparse import urljoin
 from lxml import html
 
+
 class Course(object):
     # directory in which we store all the info about the courses
     BASE_DIRECTORY = os.path.expanduser("~/Desktop/UoE")
@@ -18,7 +19,8 @@ class Course(object):
         self.semester = semester
         self.slides_url = slides_url
         self.slides_xpath = slides_xpath
-        self.lectures_directory = os.path.join(self.BASE_DIRECTORY, year, semester, name, "Lectures")
+        self.lectures_directory = os.path.join(
+            self.BASE_DIRECTORY, year, semester, name, "Lectures")
 
     def create_lecture_folder(self):
         """Creates the folders for one course."""
@@ -33,9 +35,10 @@ class Course(object):
     def download_new_lectures(self):
         """Downloads all the lecture PDFs from the URL which aren't already downloaded."""
         r = requests.get(self.slides_url)
-        page = html.fromstring(r.text)
+        page = html.fromstring(r.text)  # parse HTML into search tree
         make_absolute = lambda link: urljoin(self.slides_url, link)
-        lecture_links = [make_absolute(link.get("href")) for link in page.xpath(self.slides_xpath)]
+        lecture_links = [make_absolute(link.get("href"))
+                         for link in page.xpath(self.slides_xpath)]
 
         for link in lecture_links:
             self._download_lecture(link)
@@ -65,9 +68,9 @@ class Course(object):
             f.write(response.content)
 
 
-####################################################################################################
-# Infos about courses                                                                              #
-####################################################################################################
+##########################################################################
+# Infos about courses                                                    #
+##########################################################################
 
 YEAR_2 = "Year 2"
 SEM_1 = "Semester 1"
@@ -125,14 +128,16 @@ COURSES = [
     )
 ]
 
-####################################################################################################
-# App logic                                                                                #
-####################################################################################################
+##########################################################################
+# App logic                                                              #
+##########################################################################
+
 
 def init():
     """Creates all necessary folders to store the lectures."""
     for course in COURSES:
         course.create_lecture_folder()
+
 
 def download():
     """Downloads all the new course PDFs."""
