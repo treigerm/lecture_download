@@ -10,7 +10,21 @@ from lxml import html
 
 
 class Course(object):
-    # directory in which we store all the info about the courses
+    """Course stores all info about a course that is needed to download its lectures and save them.
+
+    Args:
+        name (string): Name of the course.
+        year (string): Year in which course takes place (e.g. 'Year 1').
+        semester (string): Semester in which course takes place (e.g. 'Semester 1').
+        slides_url (string): URL which points to the page on which the lecture slides of the course can be found.
+        slides_xpath (string): XPath expressions which retrieves links to lecture slides on slides_url.
+
+    Attributes:
+        All arguments are also class attributes.
+        lectures_directory (string): Directory in which the lecture slides will be stored.
+    """
+
+    # Directory in which we store the info about the courses.
     BASE_DIRECTORY = os.path.expanduser("~/Desktop/UoE")
 
     def __init__(self, name, year, semester, slides_url, slides_xpath):
@@ -19,6 +33,9 @@ class Course(object):
         self.semester = semester
         self.slides_url = slides_url
         self.slides_xpath = slides_xpath
+
+        # Directory in which lecture slides will be saved.
+        # Customise for your own needs.
         self.lectures_directory = os.path.join(
             self.BASE_DIRECTORY, year, semester, name, "Lectures")
 
@@ -45,10 +62,10 @@ class Course(object):
 
     def _download_lecture(self, link):
         """Saves the PDF from the given lecture in the lecture directory of the course."""
-        # go to the course directory
+        # Go to the course directory.
         os.chdir(self.lectures_directory)
 
-        # find pdf name inside the given link
+        # Find pdf name inside the given link.
         find_pdf = re.compile(r'((\w|-)+\.pdf)$')
         pdf_name = find_pdf.search(link).group()
 
@@ -56,13 +73,13 @@ class Course(object):
         if lecture_exists:
             return
 
-        # open the pdf-link
+        # Open the pdf-link.
         response = requests.get(link)
-        # if response was unsuccesfull return
-        if not response.status_code == 200:
+        request_successfull = response.status_code == 200
+        if not request_successfull:
             return
 
-        # create file and write content to it
+        # Create file and write content to it.
         print "Saving %s.." % pdf_name
         with open(pdf_name, 'w+') as f:
             f.write(response.content)
@@ -76,6 +93,7 @@ YEAR_2 = "Year 2"
 SEM_1 = "Semester 1"
 SEM_2 = "Semester 2"
 
+# Modify this list with your own courses if you want to use the script for yourself.
 COURSES = [
     Course(
         "Discrete Mathematics and Mathematical Reasoning",
@@ -143,7 +161,8 @@ def download():
     """Downloads all the new course PDFs."""
     for course in COURSES:
         print "Downloading lectures for", course.name
-        if course.slides_url and course.slides_xpath:
+        able_to_download_course = course.slides_url and course.slides_xpath
+        if able_to_download_course:
             course.download_new_lectures()
 
 
