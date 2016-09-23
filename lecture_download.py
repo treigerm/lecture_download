@@ -114,7 +114,7 @@ COURSES = [
         YEAR_2,
         SEM_1,
         "http://www.inf.ed.ac.uk/teaching/courses/inf2c-cs/schedule.html",
-        "//tr/td/a[contains(@href,'lectures')]"
+        "//tr/td/a[contains(@href,'slides')]"
     ),
     Course(
         "Informatics 2A - Processing Formal and Natural Languages",
